@@ -19,6 +19,7 @@ def scrape_all():
         "news_paragraph": news_paragraph,
         "featured_image": featured_image(browser),
         "facts": mars_facts(),
+        "hemispheres": hemispheres(browser),
         "last_modified": dt.datetime.now()
     }
     # stop webdriver and return data
@@ -103,6 +104,52 @@ def mars_facts():
 
     # convert df table to html
     return df.to_html()
+
+# insert mars_hemispheres code into a function
+def hemispheres(browser):
+
+# Use browser to visit the URL 
+    url = 'https://marshemispheres.com/'
+    browser.visit(url)
+
+# Create a list to hold the images and titles (output to disply in #4 below).
+    hemisphere_image_urls = []
+
+# Write code to retrieve the image urls and titles for each hemisphere.
+    #Since the main page has only thumbnails, we have to click into each one...
+    #then grab each item (each image, each title), 
+    #then add them together into the hemisphere_image_urls
+
+    try:
+        
+        for content in range(4):
+    
+            #click each link... https://splinter.readthedocs.io/en/latest/elements-in-the-page.html
+            browser.links.find_by_partial_text('Hemisphere')[content].click()
+            
+            #using soup to parse (jupycell 4, above)
+            html = browser.html
+            hemisphere_soup = soup(html, 'html.parser')
+            
+            #scrape the interior page...
+            title = hemisphere_soup.find('h2', class_='title').text
+            img_url = hemisphere_soup.find('li').a.get('href')
+            
+            #define dictionary, define dictionary items
+            hemisphere_content = {}
+            hemisphere_content['title']=title
+            hemisphere_content['img_url']= f'https://marshemispheres.com/{img_url}' 
+            
+            #add scraped stuff together into hemisphere_image_urls
+            hemisphere_image_urls.append(hemisphere_content)
+            browser.back()  #<<LOOP
+
+    except AttributeError:
+        return None
+
+    # Print the list that holds the dictionary of each image url and title.
+    return hemisphere_image_urls
+
 
 if __name__ == "__main__":
 

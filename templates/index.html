@@ -44,7 +44,27 @@
                     {{mars.facts | safe}}
                 </div>
             </div>
-        </div>        
+        </div>
+        
+              <!-- Section for Mars Hemispheres -->
+      <div class="row" id="mars-hemispheres" style="background-color:pink">
+        <div class="page-header" style="height: 50px">
+          <h2 class="text-center">Mars Hemispheres</h2>
+        </div>
+
+        {% for hemisphere in mars.hemispheres %}
+        <div class="col-md-3">
+            <a href="{{hemisphere.img_url}}">
+            <img
+              src="{{hemisphere.img_url}}"
+              class="img-responsive"
+              alt="{{hemisphere.title}} image"
+              title="{{hemisphere.title}} image"
+            />
+            <label>{{hemisphere.title}}</label></a>
+          </div>
+          {% endfor %}
+      </div>
     </div>
-</body>
+  </body>
 </html>
